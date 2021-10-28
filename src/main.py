@@ -20,7 +20,12 @@ def accessTopMostPopularAninme(url):
     print(topAnimeUrl)
     pageTopAnime = requests.get(topAnimeUrl)
     soupTopAnime = BeautifulSoup(pageTopAnime.content, 'html.parser')
-    print(soupTopAnime.contents)
+    mostPopular = soupTopAnime.find_all(text="Most Popular", href=True)
+    mostPopularUrl= mostPopular[0]['href']
+    root = topAnimeUrl.split("?")[0]
+    pageMostPopular = requests.get(root+mostPopularUrl)
+    soupMostPopular = BeautifulSoup(pageMostPopular.content, 'html.parser')
+    print(soupMostPopular.contents)
 
 # ---------------------------------------------------------------------------
 # Main
