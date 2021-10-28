@@ -1,16 +1,29 @@
-# This is a sample Python script.
+# ----------------------------------------------------------------------------
+# Authors: Daniel Panadero i Stefany Chóez
+# version ='1.0'
+# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Imports
+# ---------------------------------------------------------------------------
+from bs4 import BeautifulSoup
+import requests
 
-# Press Mayús+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
+# ---------------------------------------------------------------------------
+# Functions
+# ---------------------------------------------------------------------------
+def accessTopMostPopularAninme(url):
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    menuAnime = soup.find_all(text="Top Anime", href=True)
+    topAnimeUrl = menuAnime[0]['href']
+    print(topAnimeUrl)
+    pageTopAnime = requests.get(topAnimeUrl)
+    soupTopAnime = BeautifulSoup(pageTopAnime.content, 'html.parser')
+    print(soupTopAnime.contents)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    accessTopMostPopularAninme("https://myanimelist.net/")
