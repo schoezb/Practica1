@@ -27,10 +27,23 @@ class Web_Scrapping:
         mostPopularUrl = mostPopular[0]['href']
         # Extraiem la URL de la pàgina Top Anime
         root = topAnimeUrl.split("?")[0]
-        # Extraiem el contigut de la URL de Most Popular Anime
-        pageMostPopular = requests.get(root + mostPopularUrl)
-        # Organitzem el  contingut de la pàgina web
-        soupMostPopular = BeautifulSoup(pageMostPopular.content, 'html.parser')
+        # Generem la url dels animes més populars
+        link = root + mostPopularUrl
+        return link
 
-        # Retornem el contigut amb el qual generarem el dataset
-        return soupMostPopular.contents
+    def getanimeslinks(self, link):
+        # Utlitzem un for per agafar la informació de 2000 animes
+        for i in range(0, 2000, 50):
+            # Creem la url utilitzant la variable link i el contador "i"
+            url = link + "&limit=" + str(i)
+            #Utilitzem request i beatifulsoup per acaonseguir la informació
+            request = requests.get(url)
+            soup = BeautifulSoup(request.content, 'html.parser')
+            animes = soup.findAll('a', {"class": "hoverinfo_trigger fl-l ml12 mr8"})
+            #Creem una llista per guardar els enllaços
+            animelinks = []
+            #Recorrem tots els animes de la pagina actual i guardem el enllaç a la llista
+            for anime in animes:
+                href = anime['href']
+                animelinks.append(href)
+        return animelinks

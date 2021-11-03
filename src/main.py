@@ -11,3 +11,5 @@ from Web_Scrapping import Web_Scrapping
 if __name__ == '__main__':
     Scrappy = Web_Scrapping()
     content = Scrappy.getmostpopularaninme("https://myanimelist.net/")
+    animelinks = Scrappy.getanimeslinks(content)
+
