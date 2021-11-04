@@ -34,7 +34,7 @@ class Web_Scrapping:
 
     def getanimeslinks(self, link):
         # Utlitzem un for per agafar la informació de 2000 animes
-        for i in range(0, 2000, 50):
+        for i in range(0, 1000, 50):
             # Creem la url utilitzant la variable link i el contador "i"
             url = link + "&limit=" + str(i)
             #Utilitzem request i beatifulsoup per acaonseguir la informació
@@ -188,3 +188,10 @@ class Web_Scrapping:
                   demographic, rating]
 
         return result
+
+    def scrapper(self, animelinks):
+        anime = []
+        for i in animelinks:
+            print(i)
+            anime.append(self.getdata(i))
+        return anime

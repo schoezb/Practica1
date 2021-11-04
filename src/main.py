@@ -12,4 +12,5 @@ if __name__ == '__main__':
     Scrappy = Web_Scrapping()
     content = Scrappy.getmostpopularaninme("https://myanimelist.net/")
     animelinks = Scrappy.getanimeslinks(content)
-
+    anime = Scrappy.scrapper(animelinks)
+    print(anime)
