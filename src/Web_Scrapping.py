@@ -113,8 +113,8 @@ class Web_Scrapping:
                 yearslist = years.split("to")
                 yearsliststrip = [x.strip() for x in yearslist]
 
-                if type == "Movie" or (type == "OVA" and episodes > 1) or (type == "ONA" and episodes > 1) or \
-                        (type == "Special" and episodes > 1):
+                if type == "Movie" or (type == "OVA" and episodes != "1") or (type == "ONA" and episodes != "1") or \
+                        (type == "Special" and episodes != "1"):
                     day1 = ""
                     if yearsliststrip[0] != "Not available":
                         if yearsliststrip[0][5] == ",":
