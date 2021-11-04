@@ -2,8 +2,7 @@
 # ---------------------------------------------------------------------------
 from bs4 import BeautifulSoup
 import requests
-from time import strptime
-
+import time
 
 class Web_Scrapping:
     # ---------------------------------------------------------------------------
@@ -33,16 +32,16 @@ class Web_Scrapping:
         return link
 
     def getanimeslinks(self, link):
+        # Creem una llista per guardar els enllaços
+        animelinks = []
         # Utlitzem un for per agafar la informació de 2000 animes
         for i in range(0, 1000, 50):
             # Creem la url utilitzant la variable link i el contador "i"
             url = link + "&limit=" + str(i)
-            #Utilitzem request i beatifulsoup per acaonseguir la informació
+            #Utilitzem request i beatifulsoup per aconseguir la informació
             request = requests.get(url)
             soup = BeautifulSoup(request.content, 'html.parser')
             animes = soup.findAll('a', {"class": "hoverinfo_trigger fl-l ml12 mr8"})
-            #Creem una llista per guardar els enllaços
-            animelinks = []
             #Recorrem tots els animes de la pagina actual i guardem el enllaç a la llista
             for anime in animes:
                 href = anime['href']
@@ -152,6 +151,9 @@ class Web_Scrapping:
     def scrapper(self, animelinks):
         anime = []
         for i in animelinks:
+            t0 = time.time()
             print(i)
             anime.append(self.getdata(i))
+            response_delay = time.time() - t0
+            time.sleep(2 * response_delay)
         return anime
