@@ -109,12 +109,11 @@ class Web_Scrapping:
             elif "Studios" in divaux[i].next_element.next_element.text:
                 # Busquem el nombre del estudio
                 studiosaux = (divaux[i].text).split("Studios:")[1].strip()
-                studios = (divaux[i].text).split("Studios:")[1].split(",")[0].strip() + "," +\
-                          (divaux[i].text).split("Studios:")[1].split(",")[1].strip()
+                studios = (divaux[i].text).split("Studios:")[1].strip()
                 if studios == "None found, add some":
                     studiosaux = (divaux[i].text).split("Studios:")[1].strip()
                     studios = (studiosaux.split(",")[0]).strip()
-
+                
             elif "Genres" in divaux[i].next_element.next_element.text:
                 # Busquem el genere
                 spangenres = (divaux[i].text).split("Genres:\n")[1:]
