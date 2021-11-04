@@ -86,8 +86,7 @@ class Web_Scrapping:
         demographic = ""
         rating = ""
         genres = ""
-        div = soup.find_all("div", {"class": "spaceit_pad"})
-        divaux = div[3:]
+        divaux = soup.find_all("div", {"class": "spaceit_pad"})
         for i in range(0, len(divaux)):
 
             if "Type" in (divaux[i].next_element.next_element).text:
