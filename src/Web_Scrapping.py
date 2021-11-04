@@ -76,91 +76,90 @@ class Web_Scrapping:
         spanmembers = soup.find_all("span", {"class": "numbers members"})
         members = spanmembers[0].next_element.next_element.next_element
 
-        # Busquem el tipus d'anime
-        div = soup.find_all("div", {"class": "spaceit_pad"})
-        divaux = div[3:]
-        type = (divaux[0].text).split("Type:")[1].strip()
-
-        # Busquem el nombre de episodis
-        episodes = (divaux[1].text).split("Episodes:")[1].strip()
-
-        # Busquem la llicencia
-        licensorsaux = ((divaux[7].text).split("Licensors:")[1]).split(",")
-        licensorslist = [x.strip() for x in licensorsaux]
+        #Variables globals
+        type = ""
         licensors = ""
-        for i in licensorslist:
-            if i != licensorslist[len(licensorslist) - 1]:
-                licensors += i + ","
-            else:
-                licensors += i
-
-        # Busquem les fechas de inici i final d'emissió
-        years = (divaux[3].text).split("Aired:")[1]
-        yearslist = years.split("to")
-        yearsliststrip = [x.strip() for x in yearslist]
-        day1 = ""
-        if yearsliststrip[0][5] == ",":
-            day1 = yearsliststrip[0][4]
-        else:
-            day1 = yearsliststrip[0][4] + yearsliststrip[0][5]
-        month1 = strptime(yearsliststrip[0][0:3], '%b').tm_mon
-        year1 = (yearsliststrip[0].split(",")[1]).strip()
-        firstyear = year1 + "-" + str(month1) + "-" + day1
-
+        firstyear = ""
         lastyear = ""
-        if yearsliststrip[1] != "?":
-            day2 = ""
-            if yearsliststrip[1][5] == ",":
-                day2 = yearsliststrip[1][4]
-            else:
-                day2 = yearsliststrip[1][4] + yearsliststrip[1][5]
-
-            month2 = strptime(yearsliststrip[1][0:3], '%b').tm_mon
-            year2 = (yearsliststrip[1].split(",")[1]).strip()
-            lastyear = year2 + "-" + str(month2) + "-" + day2
-        else:
-            lastyear = "currently aired"
-
-        # Busquem el nombre del estudio
-        studios = (divaux[8].text).split("Studios:")[1].strip()
-
-        # Busquem el genere
-        spangenres = (divaux[10].text).split("Genres:\n")[1:]
-        genreslist = spangenres[0].split(",")
-        genres = ""
-        # Funció per obtenir els generes de l'anime
-        for i in genreslist:
-            aux = i.strip()
-            firstletter = aux[0][0]
-            genresaux = aux.split(firstletter)
-            text = firstletter + genresaux[1]
-            if i != genreslist[len(genreslist) - 1]:
-                genres += text + ","
-            else:
-                genres += text
-
-        # Busquem el tipus demografic i rating, comprovem que la demografica existeix
-        spandemographic = (divaux[12].text).split("Demographic:\n")[1:]
+        studios = ""
         demographic = ""
         rating = ""
-        if len(spandemographic) == 0:
-            demographic = "NA"
-            # Busquem la clasificació
-            spanrating = (divaux[13].text).split("Rating:\n")[1:]
-            ratinglist = spanrating[0].strip()
-            rating = ''.join([str(elem) for elem in ratinglist])
+        div = soup.find_all("div", {"class": "spaceit_pad"})
+        divaux = div[3:]
+        for i in range(0, len(divaux)):
 
-        else:
-            demographiclist = spandemographic[0].strip()
-            firstletter = demographiclist[0][0]
-            demographicaux = demographiclist.split(firstletter)
-            demographic = firstletter + demographicaux[1]
+            if "Type" in (divaux[i].next_element.next_element).text:
+                # Busquem el tipus d'anime
+                type = (divaux[i].text).split("Type:")[1].strip()
+            elif "Episodes" in (divaux[i].next_element.next_element).text:
+                # Busquem el nombre de episodis
+                episodes = (divaux[i].text).split("Episodes:")[1].strip()
+            elif "Licensors" in (divaux[i].next_element.next_element).text:
+                # Busquem la llicencia
+                licensorsaux = ((divaux[i].text).split("Licensors:")[1]).split(",")
+                licensorslist = [x.strip() for x in licensorsaux]
+                for j in licensorslist:
+                    if j != licensorslist[len(licensorslist) - 1]:
+                        licensors += j + ","
+                    else:
+                        licensors += j
+            elif "Aired" in (divaux[i].next_element.next_element).text:
+                # Busquem les fechas de inici i final d'emissió
+                years = (divaux[i].text).split("Aired:")[1]
+                yearslist = years.split("to")
+                yearsliststrip = [x.strip() for x in yearslist]
+                day1 = ""
+                if yearsliststrip[0][5] == ",":
+                    day1 = yearsliststrip[0][4]
+                else:
+                    day1 = yearsliststrip[0][4] + yearsliststrip[0][5]
+                month1 = strptime(yearsliststrip[0][0:3], '%b').tm_mon
+                year1 = (yearsliststrip[0].split(",")[1]).strip()
+                firstyear = year1 + "-" + str(month1) + "-" + day1
 
-            # Busquem la clasificació
-            spanrating = (divaux[14].text).split("Rating:\n")[1:]
-            ratinglist = spanrating[0].strip()
-            rating = ''.join([str(elem) for elem in ratinglist])
+                if yearsliststrip[1] != "?":
+                    day2 = ""
+                    if yearsliststrip[1][5] == ",":
+                        day2 = yearsliststrip[1][4]
+                    else:
+                        day2 = yearsliststrip[1][4] + yearsliststrip[1][5]
 
+                    month2 = strptime(yearsliststrip[1][0:3], '%b').tm_mon
+                    year2 = (yearsliststrip[1].split(",")[1]).strip()
+                    lastyear = year2 + "-" + str(month2) + "-" + day2
+                else:
+                    lastyear = "currently aired"
+            elif "Studios" in (divaux[i].next_element.next_element).text:
+                # Busquem el nombre del estudio
+                studios = (divaux[i].text).split("Studios:")[1].strip()
+            elif "Genres" in (divaux[i].next_element.next_element).text:
+                # Busquem el genere
+                spangenres = (divaux[i].text).split("Genres:\n")[1:]
+                genreslist = spangenres[0].split(",")
+                genres = ""
+                # Funció per obtenir els generes de l'anime
+                for j in genreslist:
+                    aux = j.strip()
+                    firstletter = aux[0][0]
+                    genresaux = aux.split(firstletter)
+                    text = firstletter + genresaux[1]
+                    if j != genreslist[len(genreslist) - 1]:
+                        genres += text + ","
+                    else:
+                        genres += text
+            elif "Demographic" in (divaux[i].next_element.next_element).text:
+                # Busquem el tipus demografic i rating, comprovem que la demografica existeix
+                spandemographic = (divaux[i].text).split("Demographic:\n")[1:]
+                demographiclist = spandemographic[0].strip()
+                firstletter = demographiclist[0][0]
+                demographicaux = demographiclist.split(firstletter)
+                demographic = firstletter + demographicaux[1]
+
+            elif "Rating" in (divaux[i].next_element.next_element).text:
+                    # Busquem la clasificació
+                    spanrating = (divaux[i].text).split("Rating:\n")[1:]
+                    ratinglist = spanrating[0].strip()
+                    rating = ''.join([str(elem) for elem in ratinglist])
 
         # Guardem tota la informació a una llista
         result = [name, score, popularity, members, type, episodes, licensors, firstyear, lastyear, studios, genres,
