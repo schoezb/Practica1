@@ -78,6 +78,7 @@ class Web_Scrapping:
 
         #Variables globals
         type = ""
+        episodes = ""
         licensors = ""
         firstyear = ""
         lastyear = ""
@@ -108,27 +109,40 @@ class Web_Scrapping:
                 years = (divaux[i].text).split("Aired:")[1]
                 yearslist = years.split("to")
                 yearsliststrip = [x.strip() for x in yearslist]
-                day1 = ""
-                if yearsliststrip[0][5] == ",":
-                    day1 = yearsliststrip[0][4]
-                else:
-                    day1 = yearsliststrip[0][4] + yearsliststrip[0][5]
-                month1 = strptime(yearsliststrip[0][0:3], '%b').tm_mon
-                year1 = (yearsliststrip[0].split(",")[1]).strip()
-                firstyear = year1 + "-" + str(month1) + "-" + day1
 
-                if yearsliststrip[1] != "?":
-                    day2 = ""
-                    if yearsliststrip[1][5] == ",":
-                        day2 = yearsliststrip[1][4]
+                if type == "Movie" or (type == "OVA" and episodes == 1) or (type == "ONA" and episodes == 1) or \
+                        (type == "Special" and episodes == 1):
+                    day1 = ""
+                    if yearsliststrip[0][5] == ",":
+                        day1 = yearsliststrip[0][4]
                     else:
-                        day2 = yearsliststrip[1][4] + yearsliststrip[1][5]
-
-                    month2 = strptime(yearsliststrip[1][0:3], '%b').tm_mon
-                    year2 = (yearsliststrip[1].split(",")[1]).strip()
-                    lastyear = year2 + "-" + str(month2) + "-" + day2
+                        day1 = yearsliststrip[0][4] + yearsliststrip[0][5]
+                    month1 = strptime(yearsliststrip[0][0:3], '%b').tm_mon
+                    year1 = (yearsliststrip[0].split(",")[1]).strip()
+                    firstyear = year1 + "-" + str(month1) + "-" + day1
                 else:
-                    lastyear = "currently aired"
+                    day1 = ""
+                    if yearsliststrip[0][5] == ",":
+                        day1 = yearsliststrip[0][4]
+                    else:
+                        day1 = yearsliststrip[0][4] + yearsliststrip[0][5]
+                    month1 = strptime(yearsliststrip[0][0:3], '%b').tm_mon
+                    year1 = (yearsliststrip[0].split(",")[1]).strip()
+                    firstyear = year1 + "-" + str(month1) + "-" + day1
+
+                    if yearsliststrip[1] != "?":
+                        day2 = ""
+                        if yearsliststrip[1][5] == ",":
+                            day2 = yearsliststrip[1][4]
+                        else:
+                            day2 = yearsliststrip[1][4] + yearsliststrip[1][5]
+
+                        month2 = strptime(yearsliststrip[1][0:3], '%b').tm_mon
+                        year2 = (yearsliststrip[1].split(",")[1]).strip()
+                        lastyear = year2 + "-" + str(month2) + "-" + day2
+                    else:
+                        lastyear = "currently aired"
+
             elif "Studios" in (divaux[i].next_element.next_element).text:
                 # Busquem el nombre del estudio
                 studios = (divaux[i].text).split("Studios:")[1].strip()
