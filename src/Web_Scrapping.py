@@ -139,17 +139,28 @@ class Web_Scrapping:
             else:
                 genres += text
 
-        # Busquem el tipus demografic
+        # Busquem el tipus demografic i rating, comprovem que la demografica existeix
         spandemographic = (divaux[12].text).split("Demographic:\n")[1:]
-        demographiclist = spandemographic[0].strip()
-        firstletter = demographiclist[0][0]
-        demographicaux = demographiclist.split(firstletter)
-        demographic = firstletter + demographicaux[1]
+        demographic = ""
+        rating = ""
+        if len(spandemographic) == 0:
+            demographic = "NA"
+            # Busquem la clasificació
+            spanrating = (divaux[13].text).split("Rating:\n")[1:]
+            ratinglist = spanrating[0].strip()
+            rating = ''.join([str(elem) for elem in ratinglist])
 
-        # Busquem la clasificació
-        spanrating = (divaux[14].text).split("Rating:\n")[1:]
-        ratinglist = spanrating[0].strip()
-        rating = ((ratinglist.split("-")[1]).split("+")[0]).strip()
+        else:
+            demographiclist = spandemographic[0].strip()
+            firstletter = demographiclist[0][0]
+            demographicaux = demographiclist.split(firstletter)
+            demographic = firstletter + demographicaux[1]
+
+            # Busquem la clasificació
+            spanrating = (divaux[14].text).split("Rating:\n")[1:]
+            ratinglist = spanrating[0].strip()
+            rating = ''.join([str(elem) for elem in ratinglist])
+
 
         # Guardem tota la informació a una llista
         result = [name, score, popularity, members, type, episodes, licensors, firstyear, lastyear, studios, genres,
