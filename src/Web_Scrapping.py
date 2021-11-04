@@ -85,6 +85,7 @@ class Web_Scrapping:
         studios = ""
         demographic = ""
         rating = ""
+        genres = ""
         div = soup.find_all("div", {"class": "spaceit_pad"})
         divaux = div[3:]
         for i in range(0, len(divaux)):
