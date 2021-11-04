@@ -98,28 +98,32 @@ class Web_Scrapping:
             elif "Licensors" in (divaux[i].next_element.next_element).text:
                 # Busquem la llicencia
                 licensorsaux = ((divaux[i].text).split("Licensors:")[1]).split(",")
-                licensorslist = [x.strip() for x in licensorsaux]
-                for j in licensorslist:
-                    if j != licensorslist[len(licensorslist) - 1]:
-                        licensors += j + ","
-                    else:
-                        licensors += j
+                if licensorsaux[0].strip() != "None found":
+                    licensorslist = [x.strip() for x in licensorsaux]
+                    for j in licensorslist:
+                        if j != licensorslist[len(licensorslist) - 1]:
+                            licensors += j + ","
+                        else:
+                            licensors += j
+                else:
+                    licensors = "None found"
             elif "Aired" in (divaux[i].next_element.next_element).text:
                 # Busquem les fechas de inici i final d'emissió
                 years = (divaux[i].text).split("Aired:")[1]
                 yearslist = years.split("to")
                 yearsliststrip = [x.strip() for x in yearslist]
 
-                if type == "Movie" or (type == "OVA" and episodes == 1) or (type == "ONA" and episodes == 1) or \
-                        (type == "Special" and episodes == 1):
+                if type == "Movie" or (type == "OVA" and episodes > 1) or (type == "ONA" and episodes > 1) or \
+                        (type == "Special" and episodes > 1):
                     day1 = ""
-                    if yearsliststrip[0][5] == ",":
-                        day1 = yearsliststrip[0][4]
-                    else:
-                        day1 = yearsliststrip[0][4] + yearsliststrip[0][5]
-                    month1 = strptime(yearsliststrip[0][0:3], '%b').tm_mon
-                    year1 = (yearsliststrip[0].split(",")[1]).strip()
-                    firstyear = year1 + "-" + str(month1) + "-" + day1
+                    if yearsliststrip[0] != "Not available":
+                        if yearsliststrip[0][5] == ",":
+                            day1 = yearsliststrip[0][4]
+                        else:
+                            day1 = yearsliststrip[0][4] + yearsliststrip[0][5]
+                        month1 = strptime(yearsliststrip[0][0:3], '%b').tm_mon
+                        year1 = (yearsliststrip[0].split(",")[1]).strip()
+                        firstyear = year1 + "-" + str(month1) + "-" + day1
                 else:
                     day1 = ""
                     if yearsliststrip[0][5] == ",":
@@ -145,7 +149,12 @@ class Web_Scrapping:
 
             elif "Studios" in (divaux[i].next_element.next_element).text:
                 # Busquem el nombre del estudio
+                studiosaux = (divaux[i].text).split("Studios:")[1].strip()
                 studios = (divaux[i].text).split("Studios:")[1].strip()
+                if studios == "None found, add some":
+                    studiosaux = (divaux[i].text).split("Studios:")[1].strip()
+                    studios = studiosaux.split(",")[0]
+
             elif "Genres" in (divaux[i].next_element.next_element).text:
                 # Busquem el genere
                 spangenres = (divaux[i].text).split("Genres:\n")[1:]
