@@ -80,7 +80,6 @@ class Web_Scrapping:
         type = ""
         episodes = ""
         licensors = ""
-        firstyear = ""
         studios = ""
         demographic = ""
         rating = ""
@@ -106,27 +105,16 @@ class Web_Scrapping:
                             licensors += j
                 else:
                     licensors = "None found"
-            elif "Aired" in (divaux[i].next_element.next_element).text:
-                # Busquem les fechas de inici i final d'emissió
-                years = (divaux[i].text).split("Aired:")[1]
-                yearslist = years.split("to")
-                yearsliststrip = [x.strip() for x in yearslist]
-                day1 = ""
-                if yearsliststrip[0] != "Not available":
-                    if yearsliststrip[0][5] == ",":
-                        day1 = yearsliststrip[0][4]
-                    else:
-                        day1 = yearsliststrip[0][4] + yearsliststrip[0][5]
-                    month1 = strptime(yearsliststrip[0][0:3], '%b').tm_mon
-                    year1 = (yearsliststrip[0].split(",")[1]).strip()
-                    firstyear = year1 + "-" + str(month1) + "-" + day1
+
             elif "Studios" in divaux[i].next_element.next_element.text:
                 # Busquem el nombre del estudio
                 studiosaux = (divaux[i].text).split("Studios:")[1].strip()
-                studios = (divaux[i].text).split("Studios:")[1].strip()
+                studios = (divaux[i].text).split("Studios:")[1].split(",")[0].strip() + "," +\
+                          (divaux[i].text).split("Studios:")[1].split(",")[1].strip()
                 if studios == "None found, add some":
                     studiosaux = (divaux[i].text).split("Studios:")[1].strip()
-                    studios = studiosaux.split(",")[0]
+                    studios = (studiosaux.split(",")[0]).strip()
+
             elif "Genres" in divaux[i].next_element.next_element.text:
                 # Busquem el genere
                 spangenres = (divaux[i].text).split("Genres:\n")[1:]
@@ -157,7 +145,7 @@ class Web_Scrapping:
                     rating = ''.join([str(elem) for elem in ratinglist])
 
         # Guardem tota la informació a una llista
-        result = [name, score, popularity, members, type, episodes, licensors, firstyear, studios, genres,
+        result = [name, score, popularity, members, type, episodes, licensors, studios, genres,
                   demographic, rating]
 
         return result
