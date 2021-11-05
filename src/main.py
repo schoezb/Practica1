@@ -9,7 +9,7 @@ from Web_Scrapping import Web_Scrapping
 # Main
 # ---------------------------------------------------------------------------
 if __name__ == '__main__':
-    Scrappy = Web_Scrapping(50)
+    Scrappy = Web_Scrapping(2000)
     Scrappy.getmostpopularaninme()
     Scrappy.getanimeslinks()
     Scrappy.scrapper()
