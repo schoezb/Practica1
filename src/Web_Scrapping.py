@@ -133,11 +133,32 @@ class Web_Scrapping:
                         genres += text
             elif "Demographic" in (divaux[i].next_element.next_element).text:
                 # Busquem el tipus demografic i rating, comprovem que la demografica existeix
-                spandemographic = (divaux[i].text).split("Demographic:\n")[1:]
-                demographiclist = spandemographic[0].strip()
-                firstletter = demographiclist[0][0]
-                demographicaux = demographiclist.split(firstletter)
-                demographic = firstletter + demographicaux[1]
+                if "Demographics:" in (divaux[i].next_element.next_element).text:
+                    spandemographic = (divaux[i].text).split("Demographics:\n")[1:]
+                    demographiclist = spandemographic[0].split(",")
+                    # Funció per obtenir les demografies de l'anime
+                    for j in demographiclist:
+                        aux = j.strip()
+                        firstletter = aux[0][0]
+                        demographicaux = aux.split(firstletter)
+                        text = firstletter + demographicaux[1]
+                        if j != demographiclist[len(demographiclist) - 1]:
+                            demographic += text + ","
+                        else:
+                            demographic += text
+                else:
+                    spandemographic = (divaux[i].text).split("Demographic:\n")[1:]
+                    demographiclist = spandemographic[0].split(",")
+                    # Funció per obtenir les demografies de l'anime
+                    for j in demographiclist:
+                        aux = j.strip()
+                        firstletter = aux[0][0]
+                        demographicaux = aux.split(firstletter)
+                        text = firstletter + demographicaux[1]
+                        if j != demographiclist[len(demographiclist) - 1]:
+                            demographic += text + ","
+                        else:
+                            demographic += text
 
             elif "Rating" in (divaux[i].next_element.next_element).text:
                 # Busquem la clasificació
