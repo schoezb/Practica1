@@ -4,13 +4,22 @@ from bs4 import BeautifulSoup
 import requests
 import time
 
+
 class Web_Scrapping:
+
+    def __init__(self, numero):
+        self.root = "https://myanimelist.net/"
+        self.numero = numero
+        self.topurl = ""
+        self.animelinks = []
+        self.anime = []
+
     # ---------------------------------------------------------------------------
     # Functions
     # ---------------------------------------------------------------------------
-    def getmostpopularaninme(self, url: str):
+    def getmostpopularaninme(self):
         # Retorna el contingut de la pàgina web
-        page = requests.get(url)
+        page = requests.get(self.root)
         # Organitzem el  contingut de la pàgina web
         soup = BeautifulSoup(page.content, 'html.parser')
         # Busquem la secció de Top Anime
@@ -26,29 +35,23 @@ class Web_Scrapping:
         # Extraiem la URL
         mostPopularUrl = mostPopular[0]['href']
         # Extraiem la URL de la pàgina Top Anime
-        root = topAnimeUrl.split("?")[0]
+        roottop = topAnimeUrl.split("?")[0]
         # Generem la url dels animes més populars
-        link = root + mostPopularUrl
-        return link
+        self.topurl = roottop + mostPopularUrl
 
-    def getanimeslinks(self, link):
-        # Creem una llista per guardar els enllaços
-        animelinks = []
+    def getanimeslinks(self):
         # Utlitzem un for per agafar la informació de 2000 animes
-        for i in range(0, 1000, 50):
+        for i in range(0, self.numero, 50):
             # Creem la url utilitzant la variable link i el contador "i"
-            url = link + "&limit=" + str(i)
-            #Utilitzem request i beatifulsoup per aconseguir la informació
+            url = self.topurl + "&limit=" + str(i)
+            # Utilitzem request i beatifulsoup per aconseguir la informació
             request = requests.get(url)
             soup = BeautifulSoup(request.content, 'html.parser')
             animes = soup.findAll('a', {"class": "hoverinfo_trigger fl-l ml12 mr8"})
-            #Recorrem tots els animes de la pagina actual i guardem el enllaç a la llista
+            # Recorrem tots els animes de la pagina actual i guardem el enllaç a la llista
             for anime in animes:
                 href = anime['href']
-                animelinks.append(href)
-        return animelinks
-
-
+                self.animelinks.append(href)
 
     def getdata(self, url: str):
         # Retorna el contingut de la pàgina web
@@ -75,7 +78,7 @@ class Web_Scrapping:
         spanmembers = soup.find_all("span", {"class": "numbers members"})
         members = spanmembers[0].next_element.next_element.next_element
 
-        #Variables globals
+        # Variables globals
         type = ""
         episodes = ""
         licensors = ""
@@ -112,7 +115,7 @@ class Web_Scrapping:
                 if studios == "None found, add some":
                     studiosaux = (divaux[i].text).split("Studios:")[1].strip()
                     studios = (studiosaux.split(",")[0]).strip()
-                
+
             elif "Genres" in divaux[i].next_element.next_element.text:
                 # Busquem el genere
                 spangenres = (divaux[i].text).split("Genres:\n")[1:]
@@ -137,10 +140,10 @@ class Web_Scrapping:
                 demographic = firstletter + demographicaux[1]
 
             elif "Rating" in (divaux[i].next_element.next_element).text:
-                    # Busquem la clasificació
-                    spanrating = (divaux[i].text).split("Rating:\n")[1:]
-                    ratinglist = spanrating[0].strip()
-                    rating = ''.join([str(elem) for elem in ratinglist])
+                # Busquem la clasificació
+                spanrating = (divaux[i].text).split("Rating:\n")[1:]
+                ratinglist = spanrating[0].strip()
+                rating = ''.join([str(elem) for elem in ratinglist])
 
         # Guardem tota la informació a una llista
         result = [name, score, popularity, members, type, episodes, licensors, studios, genres,
@@ -148,12 +151,21 @@ class Web_Scrapping:
 
         return result
 
-    def scrapper(self, animelinks):
-        anime = []
-        for i in animelinks:
+    def scrapper(self):
+        for i in self.animelinks:
             t0 = time.time()
             print(i)
-            anime.append(self.getdata(i))
+            self.anime.append(self.getdata(i))
             response_delay = time.time() - t0
             time.sleep(2 * response_delay)
-        return anime
+
+    def csv(self, filename):
+        # Creem el csv amb el nom que li hem passat
+        # Si ja existeix, es sobrescriu
+        csv = open("../csv/" + filename, "w+", encoding="utf-8")
+
+        # Copiem la informacio dels animes al csv
+        for i in range(len(self.anime)):
+            for j in range(len(self.anime[i])):
+                csv.write(self.anime[i][j] + ";")
+            csv.write("\n")

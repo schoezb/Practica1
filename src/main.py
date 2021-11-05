@@ -9,8 +9,9 @@ from Web_Scrapping import Web_Scrapping
 # Main
 # ---------------------------------------------------------------------------
 if __name__ == '__main__':
-    Scrappy = Web_Scrapping()
-    content = Scrappy.getmostpopularaninme("https://myanimelist.net/")
-    animelinks = Scrappy.getanimeslinks(content)
-    anime = Scrappy.scrapper(animelinks)
-    print(anime)
+    Scrappy = Web_Scrapping(50)
+    Scrappy.getmostpopularaninme()
+    Scrappy.getanimeslinks()
+    Scrappy.scrapper()
+    Scrappy.csv("dataset.csv")
+    print(Scrappy.anime)
