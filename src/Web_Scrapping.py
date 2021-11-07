@@ -70,7 +70,7 @@ class Web_Scrapping:
         divscore = soup.find_all("div", {"class": "fl-l score"})
         score = divscore[0].next_element.next_element
 
-        # Busquem el numbre de pupolaritat
+        # Busquem el nombre de popularitat
         spanpopularity = soup.find_all("span", {"class": "numbers popularity"})
         popularity = (spanpopularity[0].next_element.next_element.next_element).split("#")[1]
 
@@ -173,9 +173,11 @@ class Web_Scrapping:
         return result
 
     def scrapper(self):
+        # Recorrem la llista de links amb un for
         for i in self.animelinks:
+            # Utilitzem la llibreria time per aplicar un delay, per evitar que la pagina ems bloquegi l'acces
             t0 = time.time()
-            print(i)
+            # Afegim la informació del anime a la variable "anime"
             self.anime.append(self.getdata(i))
             response_delay = time.time() - t0
             time.sleep(2 * response_delay)
