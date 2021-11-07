@@ -17,7 +17,7 @@ class Web_Scrapping:
     # ---------------------------------------------------------------------------
     # Functions
     # ---------------------------------------------------------------------------
-    def getmostpopularaninme(self):
+    def getmostpopularanime(self):
         # Retorna el contingut de la pàgina web
         page = requests.get(self.root)
         # Organitzem el  contingut de la pàgina web

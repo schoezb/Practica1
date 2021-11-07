@@ -10,7 +10,7 @@ from Web_Scrapping import Web_Scrapping
 # ---------------------------------------------------------------------------
 if __name__ == '__main__':
     Scrappy = Web_Scrapping(2000)
-    Scrappy.getmostpopularaninme()
+    Scrappy.getmostpopularanime()
     Scrappy.getanimeslinks()
     Scrappy.scrapper()
     Scrappy.csv("anime.csv")
