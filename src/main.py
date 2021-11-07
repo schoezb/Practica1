@@ -13,4 +13,4 @@ if __name__ == '__main__':
     Scrappy.getmostpopularaninme()
     Scrappy.getanimeslinks()
     Scrappy.scrapper()
-    Scrappy.csv("dataset.csv")
+    Scrappy.csv("anime.csv")
