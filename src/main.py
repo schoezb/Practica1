@@ -14,4 +14,3 @@ if __name__ == '__main__':
     Scrappy.getanimeslinks()
     Scrappy.scrapper()
     Scrappy.csv("dataset.csv")
-    print(Scrappy.anime)
